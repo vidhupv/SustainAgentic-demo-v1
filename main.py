@@ -12,7 +12,7 @@ def insert_docs(folder_path):
     print("Indexed ESG documents successfully.")
 
 def main():
-    insert_docs("/Users/ragz/Library/Mobile Documents/com~apple~CloudDocs/Freelance/AIROI/AI/output")
+    insert_docs("./test_documents")
 
     #INFO: Read the below code to understand how classes interact
 
