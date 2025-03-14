@@ -1,0 +1,67 @@
+models:
+  default: llama3:8b
+  endpoint: "http://localhost:11434"
+  temperature: 0.7
+  max_tokens: 4096
+
+databases:
+  knowhere_db:
+    type: faiss
+    collection: platform
+    embedding_model: nomic-embed-text
+    dimension: 768
+    persist_directory: ./databases/knowhere_db
+
+  esg_vector_db:
+    type: faiss
+    collection: esg_standards
+    embedding_model: nomic-embed-text
+    dimension: 768
+    persist_directory: ./databases/esg_vector
+
+document_processor:
+  embedding_model: nomic-embed-text
+  chunking_profiles:
+    default:
+      strategy: recursive
+      separators:
+        - "\n\n"
+        - "\n"
+        - " "
+      chunk_size: 1000
+      chunk_overlap: 200
+      metadata_headers: ["chunk_id"]
+    esg:
+      strategy: recursive
+      separators:
+        - "\n\n"
+        - "\nREQUIREMENTS\n"
+        - "\nRECOMMENDATIONS\n"
+        - "\nGUIDANCE\n"
+        - "\n"
+        - " "
+      chunk_size: 1200
+      chunk_overlap: 300
+      metadata_headers:
+        - chunk_id
+        - summary
+        - standard
+        - requirements
+        - recommendations
+        - guidance
+        - metrics
+        - entities
+    platform_faq:
+      strategy: markdown
+      chunk_size: 800
+      chunk_overlap: 100
+      separators:
+        - "## Q:"
+        - "### Category:"
+        - "\n\n"
+      metadata_headers:
+        - chunk_id
+        - main_question
+        - related_product
+        - technical_categories
+        - troubleshooting_terms
